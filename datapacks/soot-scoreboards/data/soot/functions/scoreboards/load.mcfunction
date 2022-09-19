@@ -1,5 +1,5 @@
 
-### All command in this file are executet only when you use /reload or when you enter the world
+### All command in this file are executed only when you use /reload or when you enter the world
 
 scoreboard objectives add health health
 scoreboard objectives setdisplay list health
