@@ -29,9 +29,11 @@ jobs:
           echo "::set-output name=tag::$(release)"
       - name: Zip Datapacks
         id: makedatapacks
+        env:
+          TAG: ${{ steps.format_release.outputs.tag }}
         run: |
           mkdir -p exports/
-          find datapacks/ -mindepth 1 -maxdepth 1 -type d -exec sh -c 'zip -r exports/"$(basename {}).zip" {}' \;
+          find datapacks/ -mindepth 1 -maxdepth 1 -type d -exec sh -c 'zip -r exports/"$(basename {})-v$TAG.zip" {}' \;
       - name: Create Release
         uses: softprops/action-gh-release@v1
         with:
