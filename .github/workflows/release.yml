@@ -36,5 +36,5 @@ jobs:
         uses: softprops/action-gh-release@v1
         with:
           tag_name: "${{ steps.format_release.outputs.tag }}"
-          files: exports/*.txt
+          files: exports/*.zip
         
