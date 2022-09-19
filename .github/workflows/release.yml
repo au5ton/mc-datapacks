@@ -33,7 +33,7 @@ jobs:
           TAG: ${{ steps.format_release.outputs.tag }}
         run: |
           mkdir -p exports/
-          find datapacks/ -mindepth 1 -maxdepth 1 -type d -exec sh -c 'zip -r exports/"$(basename {})-v$TAG.zip" {}' \;
+          find datapacks/ -mindepth 1 -maxdepth 1 -type d -exec sh -c 'cd {}; zip -r ../../exports/"$(basename {})-v$TAG.zip" *' \;
       - name: Create Release
         uses: softprops/action-gh-release@v1
         with:
