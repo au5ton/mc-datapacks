@@ -1,0 +1,40 @@
+# based on: https://github.com/SaltyQuetzals/TAMU-Grade-Distribution-CSVs/blob/master/.github/workflows/release.yml
+
+on: 
+  push:
+    branches:
+      - main
+
+name: Create Release
+
+jobs:
+  build:
+    name: Create Release
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@master
+      - name: 'Set up Python'
+        uses: actions/setup-python@v1
+        with:
+          python-version: 3.7
+      - name: Format Release
+        id: format_release
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }} # This token is provided by Actions, you do not need to create your own token
+        run: |
+          release() {
+            gh release -R au5ton/mc-datapacks list -L 2 | python3 util/format_release.py
+          }
+          echo "::set-output name=tag::$(release)"
+      - name: Zip Datapacks
+        id: makedatapacks
+        run: |
+          mkdir -p exports/
+          find datapacks/ -mindepth 1 -maxdepth 1 -type d -exec sh -c 'zip -r exports/"$(basename {}).zip" {}' \;
+      - name: Create Release
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: "${{ steps.format_release.outputs.tag }}"
+          files: exports/*.txt
+        
